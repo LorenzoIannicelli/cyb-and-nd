@@ -49,3 +49,22 @@ for item in vulnerabilities:
     })
 
 df = pd.DataFrame(parsed_cves)
+#print(df)
+
+day_counts = df.groupby('day_of_week', observed=False).size().reset_index(name='count')
+#print(day_counts)
+
+ordered_day_cnt = day_counts.sort_values(by=['count'], ascending=False)
+print(ordered_day_cnt)
+
+plt.figure(figsize=(10, 6))
+plt.bar(ordered_day_cnt["day_of_week"], ordered_day_cnt["count"], color="steelblue", edgecolor="black")
+
+plt.title(f"Vulnerabilities by Day of the Week - {example}", fontsize=16)
+plt.xlabel("Day of the Week", fontsize=12)
+plt.ylabel("Number of Vulnerabilities", fontsize=12)
+
+plt.xticks(rotation=45, ha="right")  # tilt labels to avoid overlap
+plt.tight_layout()                   # adjust layout to prevent clipping
+plt.savefig("cve_by_day.png", dpi=150)
+plt.show()
