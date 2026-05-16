@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import re
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 url = "http://books.toscrape.com/catalogue/page-{}.html"
@@ -37,6 +39,29 @@ try:
 
     df = pd.DataFrame(books_list)
     print(df.head())
+
+    avg_price = df["Price"].mean()
+    min_price = df["Price"].min()
+    max_price = df["Price"].max()
+
+    print(f"Books analyzed: {len(df)}")
+    print(f"Average price: £{avg_price:.2f}")
+    print(f"Cheapest book: £{min_price:.2f}")
+    print(f"Most expensive book: £{max_price:.2f}")
+
+    fig, ax = plt.subplots(figsize=(10,6))
+
+    sns.histplot(data=df, x="Price", bins=15, kde=True, color="skyblue", ax=ax)
+
+    ax.axvline(avg_price, color="red", linestyle="--", linewidth=1.5, label=f"Average: £{avg_price:.2f}")
+
+    ax.set_title("Distribution of Book Prices")
+    ax.set_xlabel("Price (£)")
+    ax.set_ylabel("Number of Books")
+    ax.legend()
+
+    plt.tight_layout()
+    plt.show()
 
 except Exception as e:
     print(f"Connection error: {e}")
