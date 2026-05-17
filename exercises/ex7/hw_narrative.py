@@ -4,6 +4,7 @@ import pandas as pd
 import re
 import matplotlib.pyplot as plt
 import seaborn as sns
+import time
 
 
 url = "http://books.toscrape.com/catalogue/page-{}.html"
@@ -11,8 +12,9 @@ url = "http://books.toscrape.com/catalogue/page-{}.html"
 try:
     books_list = []
 
-    for page_num in range(1,6):
+    for page_num in range(1,51):
         response = requests.get(url.format(page_num))
+        time.sleep(0.5)
 
         if response.status_code != 200:
             print(f"Unexpected status code: {response.status_code}")
